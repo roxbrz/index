@@ -462,8 +462,8 @@
                 <label for="carro" class="required-field">CARRO<span class="tooltip"><span class="tooltip-icon">?</span><span class="tooltip-text">Selecione o veículo utilizado</span></span></label>
                 <select id="carro" name="carro" required>
                     <option value="">Selecione o carro</option>
-                    <option value="BYD 1">BYD 1</option>
-                    <option value="BYD 2">BYD 2</option>
+                    <option value="BYD 63">BYD 63</option>
+                    <option value="BYD 04">BYD 04</option>
                     <option value="Carens">Carens</option>
                     <option value="Doblo-41">Doblo-41</option>
                     <option value="Doblo-98">Doblo-98</option>
@@ -494,8 +494,8 @@
                     <option value="">Selecione a placa</option>
                     <option value="EMR4C04">EMR4C04 (Sandero)</option>
                     <option value="FKE9857">FKE9857 (Spin)</option>
-                    <option value="TLB5B63">TLB5B63 (BYD 1)</option>
-                    <option value="TLF1C04">TLF1C04 (BYD 2)</option>
+                    <option value="TLB5B63">TLB5B63 (BYD 63)</option>
+                    <option value="TLF1C04">TLF1C04 (BYD 04)</option>
                     <option value="RNM2A41">RNM2A41 (Doblo-41)</option>
                     <option value="RNZ9E98">RNZ9E98 (Doblo-98)</option>
                     <option value="GBK4A85">GBK4A85 (Saveiro)</option>
@@ -542,9 +542,9 @@
                 <input type="text" id="obsPneu" name="obsPneu" placeholder="Descreva a observação sobre o pneu" style="display: none; margin-top: 10px;">
             </div>
             
-            <div class="form-group" id="combustivel-group">
+            <div class="form-group hidden" id="combustivel-group">
                 <label for="combustivel" class="required-field">COMBUSTÍVEL<span class="tooltip"><span class="tooltip-icon">?</span><span class="tooltip-text">Nível do tanque de combustível</span></span></label>
-                <select id="combustivel" name="combustivel" required>
+                <select id="combustivel" name="combustivel">
                     <option value="">Selecione...</option>
                     <option value="4/4">4/4 (Tanque cheio)</option>
                     <option value="3/4">3/4</option>
@@ -553,7 +553,7 @@
                 </select>
             </div>
             
-            <div class="form-group hidden" id="bateria-group">
+            <div class="form-group" id="bateria-group">
                 <label for="bateria" class="required-field">NÍVEL DA BATERIA<span class="tooltip"><span class="tooltip-icon">?</span><span class="tooltip-text">Nível de carga da bateria (veículos elétricos)</span></span></label>
                 <input type="range" id="bateria" name="bateria" min="1" max="100" value="100" class="battery-meter" required>
                 <div id="bateria-value" class="battery-value battery-high">100%</div>
@@ -640,8 +640,8 @@
                 const mapeamentoPlacas = {
                     'Sandero': 'EMR4C04',
                     'Spin': 'FKE9857',
-                    'BYD 1': 'TLB5B63',
-                    'BYD 2': 'TLF1C04',
+                    'BYD 63': 'TLB5B63',
+                    'BYD 04': 'TLF1C04',
                     'Doblo-41': 'RNM2A41',
                     'Doblo-98': 'RNZ9E98',
                     'Saveiro': 'GBK4A85',
@@ -706,7 +706,7 @@
                 obsPneuField.style.display = this.value === 'Atenção necessária' ? 'block' : 'none';
             });
             
-            // Evento de submit corrigido
+            // Evento de submit
             document.getElementById('formViagem').addEventListener('submit', function(event) {
                 event.preventDefault();
                 
