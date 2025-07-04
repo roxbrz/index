@@ -242,7 +242,7 @@
         .battery-meter {
             width: 100%;
             -webkit-appearance: none;
-            height: 65px;
+            height: 8px;
             border-radius: 4px;
             margin-top: 12px;
             outline: none;
@@ -510,6 +510,13 @@
             </div>
             
             <div class="form-group">
+                <label for="rodizio">RODÍZIO VEÍCULAR<span class="tooltip"><span class="tooltip-icon">?</span><span class="tooltip-text">Rodízio municipal de veículos de São Paulo (não se aplica a veículos elétricos)</span></span></label>
+                <select id="rodizio" name="rodizio" disabled>
+                    <option value="">Selecione a placa primeiro</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
                 <label for="destino" class="required-field">DESTINO<span class="tooltip"><span class="tooltip-icon">?</span><span class="tooltip-text">Local de destino da viagem</span></span></label>
                 <select id="destino" name="destino" required>
                     <option value="">Selecione o destino</option>
@@ -668,6 +675,9 @@
                 const isCaminhao = carroSelecionado === 'Caminhão';
                 document.getElementById('modelo-group').classList.toggle('hidden', !isCaminhao);
                 if (!isCaminhao) document.getElementById('modelo').selectedIndex = 0;
+                
+                // Atualiza rodízio quando o carro muda
+                atualizarRodizio();
             });
             
             document.getElementById('modelo').addEventListener('change', function() {
@@ -685,6 +695,13 @@
                 if (mapeamentoModeloPlaca[modeloSelecionado]) {
                     placaSelect.value = mapeamentoModeloPlaca[modeloSelecionado];
                 }
+                
+                // Atualiza rodízio quando o modelo muda
+                atualizarRodizio();
+            });
+            
+            document.getElementById('placa').addEventListener('change', function() {
+                atualizarRodizio();
             });
             
             document.getElementById('bateria').addEventListener('input', function() {
@@ -720,6 +737,60 @@
             });
             
             document.getElementById('copyBtn').addEventListener('click', copiarMensagem);
+            
+            // Função para atualizar o rodízio veicular
+            function atualizarRodizio() {
+                const carroSelecionado = document.getElementById('carro').value;
+                const placaSelecionada = document.getElementById('placa').value;
+                const rodizioSelect = document.getElementById('rodizio');
+                
+                // Limpa as opções existentes
+                rodizioSelect.innerHTML = '';
+                
+                // Se for veículo elétrico (BYD), não aplica rodízio
+                if (carroSelecionado.includes('BYD')) {
+                    rodizioSelect.disabled = true;
+                    const option = document.createElement('option');
+                    option.value = 'Não se aplica';
+                    option.textContent = 'Não se aplica (veículo elétrico)';
+                    rodizioSelect.appendChild(option);
+                    return;
+                }
+                
+                // Se não houver placa selecionada
+                if (!placaSelecionada) {
+                    rodizioSelect.disabled = true;
+                    const option = document.createElement('option');
+                    option.value = '';
+                    option.textContent = 'Selecione a placa primeiro';
+                    rodizioSelect.appendChild(option);
+                    return;
+                }
+                
+                // Pega o último dígito da placa
+                const ultimoDigito = placaSelecionada.charAt(placaSelecionada.length - 1);
+                
+                // Determina o dia do rodízio
+                let diaRodizio = '';
+                if (['1', '2'].includes(ultimoDigito)) {
+                    diaRodizio = 'Segunda-feira';
+                } else if (['3', '4'].includes(ultimoDigito)) {
+                    diaRodizio = 'Terça-feira';
+                } else if (['5', '6'].includes(ultimoDigito)) {
+                    diaRodizio = 'Quarta-feira';
+                } else if (['7', '8'].includes(ultimoDigito)) {
+                    diaRodizio = 'Quinta-feira';
+                } else if (['9', '0'].includes(ultimoDigito)) {
+                    diaRodizio = 'Sexta-feira';
+                }
+                
+                // Atualiza o select
+                rodizioSelect.disabled = false;
+                const option = document.createElement('option');
+                option.value = diaRodizio;
+                option.textContent = `Rodízio: ${diaRodizio} (Final ${ultimoDigito})`;
+                rodizioSelect.appendChild(option);
+            }
         });
 
         function salvarRegistro() {
@@ -729,6 +800,7 @@
             const nome = form.nome.value;
             const carro = form.carro.value;
             const placa = form.placa.value || 'Não informado';
+            const rodizio = form.rodizio.value || 'Não se aplica';
             const destino = form.destino.value === 'Outro' ? form.outroDestino.value : form.destino.value;
             const nomeEvento = form.nomeEvento.value || 'Não informado';
             const km = form.km.value;
@@ -755,6 +827,7 @@
             const resultadoTexto = `NOME: ${nome}
 CARRO: ${carro}
 ${modelo}PLACA: ${placa}
+RODÍZIO: ${rodizio}
 DESTINO: ${destino}
 NOME DO EVENTO: ${nomeEvento}
 KM: ${km}
