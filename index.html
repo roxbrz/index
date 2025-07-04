@@ -692,9 +692,8 @@
             });
 
             function getBatteryColor(percent) {
-                // Tons neon entre vermelho neon e verde neon
-                const redStart = 255, greenStart = 77, blueStart = 77;  // #FF4D4D
-                const redEnd = 77, greenEnd = 255, blueEnd = 77;        // #4DFF4D
+                const redStart = 255, greenStart = 128, blueStart = 128; // #FF8080
+                const redEnd = 128, greenEnd = 255, blueEnd = 128;       // #80FF80
 
                 const p = percent / 100;
                 const r = Math.round(redStart + (redEnd - redStart) * p);
