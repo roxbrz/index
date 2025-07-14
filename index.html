@@ -809,19 +809,19 @@
             const modelo = carro === 'Caminhão' ? `MODELO: ${form.modelo.value || 'Não informado'}\n` : '';
             
             // Montar resultado
-            const resultadoTexto = `NOME: ${nome}
-CARRO: ${carro}
-${modelo}PLACA: ${placa}
-RODÍZIO: ${rodizio}
-DESTINO: ${destino}
-NOME DO EVENTO: ${nomeEvento}
-KM: ${km}
-PNEU: ${pneu}
-${combustivelOuBateria}
-CARTÃO: ${cartao}
-HIGIENE: ${higiene}
-CARRINHO: ${carrinho}
-DATA: ${dataFormatada}`;
+            const resultadoTexto = `*NOME:* ${nome}
+*CARRO:* ${carro}
+${modelo ? `*MODELO:* ${modelo}\n` : ''}*PLACA:* ${placa}
+*RODÍZIO:* ${rodizio}
+*DESTINO:* ${destino}
+*NOME DO EVENTO:* ${nomeEvento}
+*KM:* ${km}
+*PNEU:* ${pneu}
+*${isBYD ? 'BATERIA' : 'COMBUSTÍVEL'}:* ${isBYD ? form.bateria.value + '%' : (form.combustivel.value || 'Não informado')}
+*CARTÃO:* ${cartao}
+*HIGIENE:* ${higiene}
+*CARRINHO:* ${carrinho}
+*DATA:* ${dataFormatada}`;
             
             // Exibir resultado
             document.getElementById('resultado').textContent = resultadoTexto;
