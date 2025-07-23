@@ -834,13 +834,16 @@
             // Evento de submit
             document.getElementById('formViagem').addEventListener('submit', function(event) {
                 event.preventDefault();
-                
                 const submitBtn = this.querySelector('.submit-btn');
+                // Salva o texto original do botão em um atributo data
+                if (!submitBtn.hasAttribute('data-original-text')) {
+                    submitBtn.setAttribute('data-original-text', submitBtn.textContent);
+                }
                 submitBtn.classList.add('loading');
-                
+                submitBtn.textContent = 'AGUARDE...';
                 setTimeout(() => {
                     salvarRegistro();
-                    submitBtn.classList.remove('loading');
+                    // Remoção da classe e restauração do texto será feita dentro de salvarRegistro após o alert
                 }, 500);
             });
             
@@ -904,7 +907,6 @@
         function salvarRegistro() {
             const form = document.getElementById('formViagem');
             const submitBtn = form.querySelector('.submit-btn');
-            submitBtn.classList.add('loading');
             
             // Obter valores primeiro
             const nome = form.nome.value;
@@ -993,10 +995,20 @@ ${modelo ? `*MODELO:* ${modelo}\n` : ''}*PLACA:* ${placa}
                 localStorage.setItem('asaphViagemData', JSON.stringify(dadosParaSalvar));
                 
                 alert('Registro salvo com sucesso!');
+                // Restaurar texto do botão após exibir o resultado
+                if (submitBtn.hasAttribute('data-original-text')) {
+                    submitBtn.textContent = submitBtn.getAttribute('data-original-text');
+                    submitBtn.removeAttribute('data-original-text');
+                }
             })
             .catch(error => {
                 console.error('Erro ao enviar dados:', error);
                 alert('Erro ao enviar dados. Verifique o console para detalhes.');
+                // Restaurar texto do botão em caso de erro
+                if (submitBtn.hasAttribute('data-original-text')) {
+                    submitBtn.textContent = submitBtn.getAttribute('data-original-text');
+                    submitBtn.removeAttribute('data-original-text');
+                }
             })
             .finally(() => {
                 submitBtn.classList.remove('loading');
